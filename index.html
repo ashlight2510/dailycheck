@@ -389,9 +389,50 @@
       margin: 16px auto;
         text-align: center;
 }
+    .lang-switch {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      display: inline-flex;
+      gap: 0;
+      padding: 3px;
+      border-radius: 999px;
+      background: rgba(11, 22, 33, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      border: 1px solid rgba(186, 230, 253, 0.2);
+    }
+    .lang-switch button {
+      border: none;
+      background: transparent;
+      color: rgba(247, 247, 247, 0.6);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-width: 44px;
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+    .lang-switch button.active {
+      background: rgba(186, 230, 253, 0.3);
+      color: #f7f7f7;
+      box-shadow: 0 2px 8px rgba(186, 230, 253, 0.4);
+    }
+    .lang-switch button:not(.active):hover {
+      background: rgba(186, 230, 253, 0.1);
+      color: rgba(247, 247, 247, 0.9);
+    }
   </style>
 </head>
   <body>
+      <div class="lang-switch" role="tablist" aria-label="Language switcher">
+        <button type="button" data-lang="ko" class="active">KR</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
     <div class="wrap">
       <div class="shell">
         <div class="top">
@@ -521,50 +562,242 @@
 
     <script>
       // =========================
+      // 0) i18n
+      // =========================
+      const translations = {
+        ko: {
+          metaTitle: "오늘 상태 점검표 | dailycheck",
+          metaDescription: "수면·집중·기분·몸·귀찮음 5가지로 오늘 컨디션을 한 문장으로 확인합니다. 점수 없이, 딱 한 문장.",
+          metaOgTitle: "오늘 상태 점검표",
+          metaOgDescription: "오늘, 밀어붙여도 되는 날인가요? 5초 체크 → 한 문장.",
+          title: t("shareTitle"),
+          subtitle: "5개 체크 → 오늘 컨디션 한 문장",
+          viewMore: "다른 서비스 보기",
+          progressReady: "준비",
+          progressCheck: "5초 체크",
+          progressChecking: "체크 중",
+          progressComplete: "완료",
+          progressOneSentence: "오늘의 한 문장",
+          introTag: "시작",
+          introTitle: "오늘, 밀어붙여도 되는 날인가요?",
+          introHint: "점수 없이, 딱 한 문장으로만 알려드립니다.",
+          startBtn: "시작하기",
+          disclaimer: "※ 제공되는 문구는 참고용입니다. 건강/의학적 판단이 필요한 경우 전문 상담을 권장합니다.",
+          q0_title: "수면은 어땠나요?",
+          q0_hint: "오늘의 바닥을 결정하는 값",
+          q1_title: "집중은 가능한가요?",
+          q1_hint: "오늘의 속도를 정하는 값",
+          q2_title: "기분은 어떤가요?",
+          q2_hint: "오늘의 마찰을 정하는 값",
+          q3_title: "몸 상태는요?",
+          q3_hint: "오늘의 지속력을 정하는 값",
+          q4_title: "귀찮음이 얼마나 오나요?",
+          q4_hint: "오늘의 저항값",
+          resultTag: "결과",
+          resultTitle: "오늘 컨디션 요약",
+          backBtn: "이전",
+          copyBtn: "결과 복사",
+          shareBtn: "공유",
+          resetBtn: "다시하기",
+          footHintRoutine: "하루 1회 루틴용",
+          footHintResult: "점수 없이 한 문장",
+          toastCopy: "복사 완료",
+          toastCopyLink: "공유 텍스트 복사됨",
+          toastRemaining: "아직 체크가 남아있어요",
+          resultLabelA: "PUSH OK",
+          resultLabelB: "SAVE MODE",
+          resultLabelC: "BRAKE",
+          resultMetaSaved: "오늘 결과는 이미 생성되어 있어요. (다시하기로 재생성 가능)",
+          resultMetaNew: "오늘 결과가 저장되었습니다. (브라우저 로컬 저장)",
+          shareTitle: "오늘 상태 점검표",
+        },
+        en: {
+          metaTitle: "Today's Condition Check | dailycheck",
+          metaDescription: "Check today's condition in one sentence with 5 factors: sleep, focus, mood, body, laziness. No scores, just one sentence.",
+          metaOgTitle: "Today's Condition Check",
+          metaOgDescription: "Is today a day to push through? 5-second check → one sentence.",
+          title: "Today's Condition Check",
+          subtitle: "5 checks → Today's condition in one sentence",
+          viewMore: "View Other Services",
+          progressReady: "Ready",
+          progressCheck: "5-sec check",
+          progressChecking: "Checking",
+          progressComplete: "Complete",
+          progressOneSentence: "Today's one sentence",
+          introTag: "Start",
+          introTitle: "Is today a day to push through?",
+          introHint: "No scores, just one sentence.",
+          startBtn: "Start",
+          disclaimer: "※ The provided phrases are for reference only. For health/medical judgments, professional consultation is recommended.",
+          q0_title: "How was your sleep?",
+          q0_hint: "Value that determines today's floor",
+          q1_title: "Can you focus?",
+          q1_hint: "Value that sets today's speed",
+          q2_title: "How are you feeling?",
+          q2_hint: "Value that sets today's friction",
+          q3_title: "How's your body?",
+          q3_hint: "Value that sets today's endurance",
+          q4_title: "How lazy are you?",
+          q4_hint: "Today's resistance value",
+          resultTag: "Result",
+          resultTitle: "Today's Condition Summary",
+          backBtn: "Back",
+          copyBtn: "Copy Result",
+          shareBtn: "Share",
+          resetBtn: "Reset",
+          footHintRoutine: "Daily routine",
+          footHintResult: "One sentence, no scores",
+          toastCopy: "Copied",
+          toastCopyLink: "Share text copied",
+          toastRemaining: "Still have checks remaining",
+          resultLabelA: "PUSH OK",
+          resultLabelB: "SAVE MODE",
+          resultLabelC: "BRAKE",
+          resultMetaSaved: "Today's result is already generated. (You can regenerate with Reset)",
+          resultMetaNew: "Today's result has been saved. (Browser local storage)",
+          shareTitle: "Today's Condition Check",
+        },
+      };
+
+      const defaultLang = "ko";
+      const supportedLangs = ["ko", "en"];
+      let currentLang = defaultLang;
+
+      function t(key, vars = {}) {
+        const langTable = translations[currentLang] || translations.ko;
+        let template = langTable?.[key] ?? translations.ko?.[key] ?? key;
+        if (typeof template !== "string") return template;
+        Object.keys(vars).forEach((k) => {
+          template = template.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), vars[k]);
+        });
+        return template;
+      }
+
+      function applyTranslations() {
+        document.title = t("metaTitle");
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) metaDesc.setAttribute("content", t("metaDescription"));
+        const metaOgTitle = document.querySelector('meta[property="og:title"]');
+        if (metaOgTitle) metaOgTitle.setAttribute("content", t("metaOgTitle"));
+        const metaOgDesc = document.querySelector('meta[property="og:description"]');
+        if (metaOgDesc) metaOgDesc.setAttribute("content", t("metaOgDescription"));
+        document.documentElement.lang = currentLang;
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          el.textContent = t(el.dataset.i18n);
+        });
+        document.querySelectorAll("[data-i18n-html]").forEach((el) => {
+          el.innerHTML = t(el.dataset.i18nHtml);
+        });
+        document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+          el.setAttribute("placeholder", t(el.dataset.i18nPlaceholder));
+        });
+      }
+
+      function setLang(lang, options = {}) {
+        const nextLang = translations[lang] ? lang : defaultLang;
+        currentLang = nextLang;
+        document.documentElement.lang = nextLang;
+        localStorage.setItem("preferredLang", nextLang);
+        document.querySelectorAll(".lang-switch button").forEach((button) => {
+          button.classList.toggle("active", button.dataset.lang === nextLang);
+        });
+        applyTranslations();
+        // Update dynamic content if quiz is in progress
+        if (typeof step !== "undefined" && step) {
+          if (step === "intro") {
+            updateProgress("intro");
+          } else if (step.startsWith("q")) {
+            renderQuestions();
+            updateProgress(step);
+          } else if (step === "result") {
+            const saved = loadSaved(today);
+            if (saved) {
+              applyResult(saved, { fromSaved: true });
+            }
+            updateProgress("result");
+          }
+        }
+        if (options.updateUrl) {
+          const url = new URL(window.location.href);
+          url.searchParams.set("lang", nextLang);
+          window.history.replaceState({}, "", url);
+        }
+      }
+
+      function detectLang() {
+        const params = new URLSearchParams(window.location.search);
+        const paramLang = params.get("lang");
+        if (translations[paramLang]) return paramLang;
+        const stored = localStorage.getItem("preferredLang");
+        if (translations[stored]) return stored;
+        const browser = navigator.language?.toLowerCase() || "";
+        return browser.startsWith("ko") ? "ko" : "en";
+      }
+
+      // Initialize language
+      setLang(detectLang(), { updateUrl: false });
+      document.querySelectorAll(".lang-switch button").forEach((button) => {
+        button.addEventListener("click", () => {
+          setLang(button.dataset.lang, { updateUrl: true });
+        });
+      });
+
+      // =========================
       // 1) 질문/선택지 (각 선택은 0=좋음, 1=보통, 2=나쁨)
       // =========================
-      const QUESTIONS = [
+      const QUESTIONS_BASE = [
         {
           key: "sleep",
           choices: [
-            { label: "잘 잤다", v: 0 },
-            { label: "애매하다", v: 1 },
-            { label: "거의 못 잤다", v: 2 },
+            { label: "잘 잤다", labelEn: "Slept well", v: 0 },
+            { label: "애매하다", labelEn: "Ambiguous", v: 1 },
+            { label: "거의 못 잤다", labelEn: "Hardly slept", v: 2 },
           ],
         },
         {
           key: "focus",
           choices: [
-            { label: "집중 잘 된다", v: 0 },
-            { label: "왔다 갔다 한다", v: 1 },
-            { label: "거의 안 된다", v: 2 },
+            { label: "집중 잘 된다", labelEn: "Can focus well", v: 0 },
+            { label: "왔다 갔다 한다", labelEn: "Intermittent", v: 1 },
+            { label: "거의 안 된다", labelEn: "Hardly works", v: 2 },
           ],
         },
         {
           key: "mood",
           choices: [
-            { label: "괜찮다", v: 0 },
-            { label: "무덤덤하다", v: 1 },
-            { label: "예민하다", v: 2 },
+            { label: "괜찮다", labelEn: "OK", v: 0 },
+            { label: "무덤덤하다", labelEn: "Neutral", v: 1 },
+            { label: "예민하다", labelEn: "Sensitive", v: 2 },
           ],
         },
         {
           key: "body",
           choices: [
-            { label: "가볍다", v: 0 },
-            { label: "좀 무겁다", v: 1 },
-            { label: "피곤하다", v: 2 },
+            { label: "가볍다", labelEn: "Light", v: 0 },
+            { label: "좀 무겁다", labelEn: "A bit heavy", v: 1 },
+            { label: "피곤하다", labelEn: "Tired", v: 2 },
           ],
         },
         {
           key: "lazy",
           choices: [
-            { label: "별로 안 귀찮다", v: 0 },
-            { label: "하기 싫다", v: 1 },
-            { label: "아무것도 하기 싫다", v: 2 },
+            { label: "별로 안 귀찮다", labelEn: "Not really lazy", v: 0 },
+            { label: "하기 싫다", labelEn: "Don't want to", v: 1 },
+            { label: "아무것도 하기 싫다", labelEn: "Don't want to do anything", v: 2 },
           ],
         },
       ];
+
+      function getQuestions() {
+        const isEnglish = currentLang === "en";
+        return QUESTIONS_BASE.map((q) => ({
+          ...q,
+          choices: q.choices.map((c) => ({
+            ...c,
+            label: isEnglish ? c.labelEn : c.label,
+          })),
+        }));
+      }
 
       // =========================
       // 2) 결과 문장 풀 60개 (점수/퍼센트 없음)
@@ -577,366 +810,546 @@
         {
           type: "A",
           main: "오늘은 밀어붙여도 되는 날입니다.",
+          mainEn: "Today is a day you can push through.",
           sub: "가장 중요한 한 가지부터 먼저 치고 나가면 흐름이 붙습니다.",
+          subEn: "Start with the most important one first, and momentum will follow.",
           safe: "오늘의 성공 기준: 핵심 1개 끝내기",
+          safeEn: "Today's success goal: Finish 1 core task",
         },
         {
           type: "A",
           main: "오늘은 집중을 써도 손해 보지 않습니다.",
+          mainEn: "Today, using your focus won't hurt.",
           sub: "짧게 시작하면 길게 갑니다. 10분만 먼저.",
+          subEn: "Start short and it goes long. Just 10 minutes first.",
           safe: "오늘의 성공 기준: 시작하기",
+          safeEn: "Today's success goal: Just start",
         },
         {
           type: "A",
           main: "오늘은 ‘일단 하면 되는’ 날입니다.",
+          mainEn: "오늘은 ‘일단 하면 되는’ 날입니다.",
           sub: "완벽은 금지. 실행이 이깁니다.",
+          subEn: "Perfection is forbidden. Execution wins.",
           safe: "오늘의 성공 기준: 60%로 제출",
+          safeEn: "Today's success goal: Submit at 60%",
         },
         {
           type: "A",
           main: "오늘은 속도가 붙는 날입니다.",
+          mainEn: "Today is a day when speed kicks in.",
           sub: "초반만 잡으면 나머지는 자동으로 따라옵니다.",
+          subEn: "Grab the beginning and the rest follows automatically.",
           safe: "오늘의 성공 기준: 오전 한 번 질주",
+          safeEn: "Today's success goal: One sprint in the morning",
         },
         {
           type: "A",
           main: "오늘은 생각보다 잘 버티는 날입니다.",
+          mainEn: "Today is a day you can handle better than you think.",
           sub: "중요한 일을 앞쪽에 배치하세요.",
+          subEn: "Place important tasks first.",
           safe: "오늘의 성공 기준: 큰 일 먼저",
+          safeEn: "Today's success goal: Big task first",
         },
         {
           type: "A",
           main: "오늘은 의사결정이 깔끔하게 떨어집니다.",
+          mainEn: "Today, decisions fall cleanly.",
           sub: "미루던 선택 하나를 정리해도 좋습니다.",
+          subEn: "It's okay to settle one postponed choice.",
           safe: "오늘의 성공 기준: 결정 1개",
+          safeEn: "Today's success goal: Make 1 decision",
         },
         {
           type: "A",
           main: "오늘은 ‘정리하면 끝나는’ 날입니다.",
+          mainEn: "오늘은 ‘정리하면 끝나는’ 날입니다.",
           sub: "쌓인 것들 중 하나만 치워도 체감이 큽니다.",
+          subEn: "Clearing just one of the piled things makes a big difference.",
           safe: "오늘의 성공 기준: 정리 1개",
+          safeEn: "Today's success goal: Organize 1 thing",
         },
         {
           type: "A",
           main: "오늘은 마음이 흔들려도 몸이 따라주는 날입니다.",
+          mainEn: "Today is a day when your body follows even if your mind wavers.",
           sub: "작은 루틴을 붙이면 결과가 큽니다.",
+          subEn: "Attaching a small routine yields big results.",
           safe: "오늘의 성공 기준: 루틴 1개",
+          safeEn: "Today's success goal: 1 routine",
         },
         {
           type: "A",
           main: "오늘은 말이 잘 통하는 날입니다.",
+          mainEn: "Today is a day when words flow well.",
           sub: "필요한 연락/협의는 오늘 처리하는 게 유리합니다.",
+          subEn: "It's better to handle necessary contact/coordination today.",
           safe: "오늘의 성공 기준: 연락 1개",
+          safeEn: "Today's success goal: 1 contact",
         },
         {
           type: "A",
           main: "오늘은 ‘쌓아두기’에 최적인 날입니다.",
+          mainEn: "오늘은 ‘쌓아두기’에 최적인 날입니다.",
           sub: "조금만 해도 복리처럼 남습니다.",
+          subEn: "Even a little bit accumulates like compound interest.",
           safe: "오늘의 성공 기준: 20분 누적",
+          safeEn: "Today's success goal: 20 minutes accumulated",
         },
         {
           type: "A",
           main: "오늘은 컨디션이 작업 모드에 가깝습니다.",
+          mainEn: "Today, your condition is close to work mode.",
           sub: "멀티태스킹 말고 한 줄로 쭉.",
+          subEn: "Not multitasking, but one line straight.",
           safe: "오늘의 성공 기준: 한 가지로 쭉",
+          safeEn: "Today's success goal: One thing straight",
         },
         {
           type: "A",
           main: "오늘은 답이 빨리 보이는 날입니다.",
+          mainEn: "Today is a day when answers appear quickly.",
           sub: "고민 시간을 줄이고 바로 시도하세요.",
+          subEn: "Reduce worry time and try immediately.",
           safe: "오늘의 성공 기준: 시도 1번",
+          safeEn: "Today's success goal: 1 attempt",
         },
         {
           type: "A",
           main: "오늘은 ‘해놓고 잊기’가 가능한 날입니다.",
+          mainEn: "오늘은 ‘해놓고 잊기’가 가능한 날입니다.",
           sub: "귀찮은 일을 먼저 끝내면 하루가 편해집니다.",
+          subEn: "Finish annoying tasks first and the day becomes easier.",
           safe: "오늘의 성공 기준: 귀찮은 거 1개 처리",
+          safeEn: "Today's success goal: Handle 1 annoying thing",
         },
         {
           type: "A",
           main: "오늘은 기분보다 루틴이 이기는 날입니다.",
+          mainEn: "Today is a day when routine wins over mood.",
           sub: "작게 시작해도 성과는 나옵니다.",
+          subEn: "Even starting small yields results.",
           safe: "오늘의 성공 기준: 10분 루틴",
+          safeEn: "Today's success goal: 10-minute routine",
         },
         {
           type: "A",
           main: "오늘은 체력이 말을 듣는 날입니다.",
+          mainEn: "Today is a day when your body listens.",
           sub: "짧게 몰입하고 짧게 쉬는 리듬이 좋습니다.",
+          subEn: "Short immersion and short breaks work well.",
           safe: "오늘의 성공 기준: 25분 몰입 1회",
+          safeEn: "Today's success goal: 1 session of 25-minute immersion",
         },
         {
           type: "A",
           main: "오늘은 ‘정리+실행’ 조합이 잘 먹힙니다.",
+          mainEn: "오늘은 ‘정리+실행’ 조합이 잘 먹힙니다.",
           sub: "할 일 목록을 줄이고 바로 하세요.",
+          subEn: "Reduce your to-do list and do it right away.",
           safe: "오늘의 성공 기준: 목록 반으로 줄이기",
+          safeEn: "Today's success goal: Cut list in half",
         },
         {
           type: "A",
           main: "오늘은 집중의 창이 열려 있습니다.",
+          mainEn: "Today, the window of focus is open.",
           sub: "가장 어려운 일을 ‘첫 작업’으로 넣으세요.",
+          subEn: "가장 어려운 일을 ‘첫 작업’으로 넣으세요.",
           safe: "오늘의 성공 기준: 어려운 거 1개 착수",
+          safeEn: "Today's success goal: Start 1 difficult task",
         },
         {
           type: "A",
           main: "오늘은 작은 승리를 쌓기 쉬운 날입니다.",
+          mainEn: "Today is a day when small victories stack easily.",
           sub: "완료 체크를 늘 기억하세요.",
+          subEn: "Always remember to check things off.",
           safe: "오늘의 성공 기준: 완료 2개",
+          safeEn: "Today's success goal: Complete 2 things",
         },
         {
           type: "A",
           main: "오늘은 ‘해야 할 말’을 하기 좋은 날입니다.",
+          mainEn: "오늘은 ‘해야 할 말’을 하기 좋은 날입니다.",
           sub: "대화는 짧게, 요지는 명확하게.",
+          subEn: "Keep conversations short, points clear.",
           safe: "오늘의 성공 기준: 한 문장으로 말하기",
+          safeEn: "Today's success goal: Say it in one sentence",
         },
         {
           type: "A",
           main: "오늘은 끝까지 가는 힘이 있습니다.",
+          mainEn: "Today, you have the strength to go all the way.",
           sub: "중간에 흔들려도 계속 가면 됩니다.",
+          subEn: "Even if you waver in the middle, just keep going.",
           safe: "오늘의 성공 기준: 마무리 1개",
+          safeEn: "Today's success goal: Finish 1 thing",
         },
 
         // B (21~40)
         {
           type: "B",
           main: "오늘은 아껴 쓰는 게 이득인 날입니다.",
+          mainEn: "Today is a day when saving pays off.",
           sub: "중요한 것만 하고, 나머지는 내일로 미뤄도 됩니다.",
+          subEn: "Do only what's important, the rest can wait until tomorrow.",
           safe: "오늘의 성공 기준: 필수만 하기",
+          safeEn: "Today's success goal: Only essentials",
         },
         {
           type: "B",
           main: "오늘은 ‘가볍게 처리’가 정답입니다.",
+          mainEn: "오늘은 ‘가볍게 처리’가 정답입니다.",
           sub: "깊게 파기보다 얕게 여러 개가 더 맞습니다.",
+          subEn: "Multiple shallow tasks are better than one deep dive.",
           safe: "오늘의 성공 기준: 가벼운 완료 3개",
+          safeEn: "Today's success goal: 3 light completions",
         },
         {
           type: "B",
           main: "오늘은 속도보다 방향이 중요한 날입니다.",
+          mainEn: "Today, direction is more important than speed.",
           sub: "빨리보다 ‘맞게’가 이깁니다.",
+          subEn: "빨리보다 ‘맞게’가 이깁니다.",
           safe: "오늘의 성공 기준: 방향 확인 1번",
+          safeEn: "Today's success goal: Check direction once",
         },
         {
           type: "B",
           main: "오늘은 무리하면 내일이 망가집니다.",
+          mainEn: "If you push too hard today, tomorrow will be ruined.",
           sub: "오늘은 컨디션을 조금 남겨두세요.",
+          subEn: "Leave a little condition for today.",
           safe: "오늘의 성공 기준: 에너지 30% 남기기",
+          safeEn: "Today's success goal: Leave 30% energy",
         },
         {
           type: "B",
           main: "오늘은 ‘할 건 하되 욕심은 금지’인 날입니다.",
+          mainEn: "오늘은 ‘할 건 하되 욕심은 금지’인 날입니다.",
           sub: "목표를 줄이면 충분히 괜찮은 하루가 됩니다.",
+          subEn: "Reducing goals makes for a sufficiently good day.",
           safe: "오늘의 성공 기준: 목표 1개로 축소",
+          safeEn: "Today's success goal: Reduce to 1 goal",
         },
         {
           type: "B",
           main: "오늘은 집중이 들쑥날쑥할 수 있습니다.",
+          mainEn: "Today, focus can be uneven.",
           sub: "짧게 끊어 가면 생각보다 잘 됩니다.",
+          subEn: "Going in short bursts works better than you think.",
           safe: "오늘의 성공 기준: 10분 몰입 2회",
+          safeEn: "Today's success goal: 2 sessions of 10-minute immersion",
         },
         {
           type: "B",
           main: "오늘은 감정에 휘둘리기 쉬운 날입니다.",
+          mainEn: "Today is a day when you're easily swayed by emotions.",
           sub: "결정은 ‘작게’만 하세요.",
+          subEn: "결정은 ‘작게’만 하세요.",
           safe: "오늘의 성공 기준: 작은 결정만",
+          safeEn: "Today's success goal: Only small decisions",
         },
         {
           type: "B",
           main: "오늘은 ‘정리’가 먼저인 날입니다.",
+          mainEn: "오늘은 ‘정리’가 먼저인 날입니다.",
           sub: "뭐부터 할지 정하면 절반은 끝입니다.",
+          subEn: "Deciding what to do first is half the battle.",
           safe: "오늘의 성공 기준: 우선순위 1~3 정하기",
+          safeEn: "Today's success goal: Set priorities 1-3",
         },
         {
           type: "B",
           main: "오늘은 반응 속도를 낮추는 게 좋습니다.",
+          mainEn: "Today, it's good to slow down your reaction speed.",
           sub: "바로 답하기보다 한 번 멈추면 실수가 줄어듭니다.",
+          subEn: "Pausing once reduces mistakes more than answering immediately.",
           safe: "오늘의 성공 기준: 한 박자 쉬고 답하기",
+          safeEn: "Today's success goal: Pause, then answer",
         },
         {
           type: "B",
           main: "오늘은 ‘루틴만 지켜도 성공’인 날입니다.",
+          mainEn: "오늘은 ‘루틴만 지켜도 성공’인 날입니다.",
           sub: "기본만 해도 충분합니다.",
+          subEn: "Just the basics are enough.",
           safe: "오늘의 성공 기준: 기본 3개(물/정리/식사)",
+          safeEn: "Today's success goal: Basics 3 (water/organize/eat)",
         },
         {
           type: "B",
           main: "오늘은 과몰입하면 피로가 쌓입니다.",
+          mainEn: "If you over-immerse today, fatigue will pile up.",
           sub: "중요한 것 하나만 깊게 하고 멈추세요.",
+          subEn: "Go deep on just one important thing and stop.",
           safe: "오늘의 성공 기준: 깊게 1개만",
+          safeEn: "Today's success goal: Deep dive on 1 only",
         },
         {
           type: "B",
           main: "오늘은 ‘미루지 않기’만 해도 이깁니다.",
+          mainEn: "오늘은 ‘미루지 않기’만 해도 이깁니다.",
           sub: "큰 것 말고 작은 것부터.",
+          subEn: "Not big things, start with small ones.",
           safe: "오늘의 성공 기준: 5분 작업 1개",
+          safeEn: "Today's success goal: 1 task of 5 minutes",
         },
         {
           type: "B",
           main: "오늘은 몸이 은근히 신호를 줍니다.",
+          mainEn: "Today, your body subtly signals.",
           sub: "자잘한 피로를 무시하지 마세요.",
+          subEn: "Don't ignore small fatigue.",
           safe: "오늘의 성공 기준: 스트레칭 3분",
+          safeEn: "Today's success goal: 3 minutes of stretching",
         },
         {
           type: "B",
           main: "오늘은 ‘사람’보다 ‘일’에 에너지를 쓰는 게 낫습니다.",
+          mainEn: "오늘은 ‘사람’보다 ‘일’에 에너지를 쓰는 게 낫습니다.",
           sub: "불필요한 대화는 줄이세요.",
+          subEn: "Reduce unnecessary conversations.",
           safe: "오늘의 성공 기준: 대화 줄이기",
+          safeEn: "Today's success goal: Reduce conversations",
         },
         {
           type: "B",
           main: "오늘은 집중을 모으는 데 시간이 걸립니다.",
+          mainEn: "Today, it takes time to gather focus.",
           sub: "시작만 늦지 않게 잡으세요.",
+          subEn: "Just don't start late.",
           safe: "오늘의 성공 기준: 시작 시간 고정",
+          safeEn: "Today's success goal: Fix start time",
         },
         {
           type: "B",
           main: "오늘은 ‘가벼운 성취’가 컨디션을 올립니다.",
+          mainEn: "오늘은 ‘가벼운 성취’가 컨디션을 올립니다.",
           sub: "바로 끝나는 것부터 처리하세요.",
+          subEn: "Handle things that end immediately first.",
           safe: "오늘의 성공 기준: 1분짜리 완료 2개",
+          safeEn: "Today's success goal: 2 completions of 1 minute each",
         },
         {
           type: "B",
           main: "오늘은 계획을 욕심내면 무너집니다.",
+          mainEn: "If you're greedy with plans today, they'll collapse.",
           sub: "플랜 B를 기본값으로.",
+          subEn: "Make Plan B the default.",
           safe: "오늘의 성공 기준: 여유 버퍼 1칸",
+          safeEn: "Today's success goal: 1 buffer space",
         },
         {
           type: "B",
           main: "오늘은 자책하면 더 느려집니다.",
+          mainEn: "If you blame yourself today, you'll get slower.",
           sub: "속도가 느려도 괜찮습니다. 방향만 맞추세요.",
+          subEn: "Slow speed is okay. Just get the direction right.",
           safe: "오늘의 성공 기준: 자책 금지",
+          safeEn: "Today's success goal: No self-blame",
         },
         {
           type: "B",
           main: "오늘은 ‘지키는 하루’가 더 어울립니다.",
+          mainEn: "오늘은 ‘지키는 하루’가 더 어울립니다.",
           sub: "새로운 시도는 작게만.",
+          subEn: "New attempts, keep them small.",
           safe: "오늘의 성공 기준: 새 시도 1cm",
+          safeEn: "Today's success goal: New attempt 1cm",
         },
         {
           type: "B",
           main: "오늘은 컨디션이 반반입니다.",
+          mainEn: "Today, condition is half and half.",
           sub: "좋을 때 조금 하고, 안 좋을 때 쉬세요.",
+          subEn: "Do a little when good, rest when not good.",
           safe: "오늘의 성공 기준: 쉬기 포함 계획",
+          safeEn: "Today's success goal: Plan including rest",
         },
 
         // C (41~60)
         {
           type: "C",
           main: "오늘은 밀어붙이면 손해 보는 날입니다.",
+          mainEn: "Today is a day when pushing will cost you.",
           sub: "속도를 내기보다 브레이크를 거는 쪽이 낫습니다.",
+          subEn: "Better to hit the brakes than accelerate.",
           safe: "오늘의 성공 기준: 버티기",
+          safeEn: "Today's success goal: Endure",
         },
         {
           type: "C",
           main: "오늘은 쉬는 쪽이 이기는 선택입니다.",
+          mainEn: "Today, choosing to rest is the winning choice.",
           sub: "해야 할 일은 ‘최소치’만 남기세요.",
+          subEn: "해야 할 일은 ‘최소치’만 남기세요.",
           safe: "오늘의 성공 기준: 최소치만",
+          safeEn: "Today's success goal: Minimum only",
         },
         {
           type: "C",
           main: "오늘은 컨디션이 바닥을 건드립니다.",
+          mainEn: "Today, your condition touches the bottom.",
           sub: "큰 결정은 내일로 미루는 게 안전합니다.",
+          subEn: "It's safer to postpone big decisions until tomorrow.",
           safe: "오늘의 성공 기준: 결정 미루기",
+          safeEn: "Today's success goal: Postpone decisions",
         },
         {
           type: "C",
           main: "오늘은 ‘진행’보다 ‘회복’이 우선입니다.",
+          mainEn: "오늘은 ‘진행’보다 ‘회복’이 우선입니다.",
           sub: "회복이 되면 내일이 열립니다.",
+          subEn: "When you recover, tomorrow opens up.",
           safe: "오늘의 성공 기준: 회복 1개",
+          safeEn: "Today's success goal: 1 recovery",
         },
         {
           type: "C",
           main: "오늘은 집중을 억지로 뽑아쓰면 고장 납니다.",
+          mainEn: "If you force out focus today, it will break.",
           sub: "짧게만 하고 바로 끊으세요.",
+          subEn: "Do it short and cut it off immediately.",
           safe: "오늘의 성공 기준: 10분만 하고 끊기",
+          safeEn: "Today's success goal: Just 10 minutes then stop",
         },
         {
           type: "C",
           main: "오늘은 예민함이 정상인 날입니다.",
+          mainEn: "Today, sensitivity is normal.",
           sub: "나를 탓하기보다 환경을 낮추세요.",
+          subEn: "Lower the environment rather than blame yourself.",
           safe: "오늘의 성공 기준: 소음/알림 줄이기",
+          safeEn: "Today's success goal: Reduce noise/notifications",
         },
         {
           type: "C",
           main: "오늘은 몸이 먼저 멈추라고 합니다.",
+          mainEn: "Today, your body says to stop first.",
           sub: "무리한 약속/운동/야근은 피하는 게 좋습니다.",
+          subEn: "It's better to avoid excessive commitments/exercise/overtime.",
           safe: "오늘의 성공 기준: 무리 금지",
+          safeEn: "Today's success goal: No pushing",
         },
         {
           type: "C",
           main: "오늘은 ‘그냥 해내기’가 어려운 날입니다.",
+          mainEn: "오늘은 ‘그냥 해내기’가 어려운 날입니다.",
           sub: "작게 쪼개면 겨우 통과합니다.",
+          subEn: "Only passable if broken into small pieces.",
           safe: "오늘의 성공 기준: 3분 단위로 쪼개기",
+          safeEn: "Today's success goal: Break into 3-minute units",
         },
         {
           type: "C",
           main: "오늘은 마음이 쉽게 닳는 날입니다.",
+          mainEn: "Today is a day when your mind wears out easily.",
           sub: "사람에게 에너지를 쓰지 마세요.",
+          subEn: "Don't spend energy on people.",
           safe: "오늘의 성공 기준: 혼자 조용히",
+          safeEn: "Today's success goal: Alone quietly",
         },
         {
           type: "C",
           main: "오늘은 ‘미루기’가 아니라 ‘보호’가 필요합니다.",
+          mainEn: "오늘은 ‘미루기’가 아니라 ‘보호’가 필요합니다.",
           sub: "스스로를 보호하면 내일이 살아납니다.",
+          subEn: "Protecting yourself brings tomorrow to life.",
           safe: "오늘의 성공 기준: 보호 모드",
+          safeEn: "Today's success goal: Protection mode",
         },
         {
           type: "C",
           main: "오늘은 생산성보다 생존이 우선입니다.",
+          mainEn: "Today, survival comes before productivity.",
           sub: "할 일은 줄이고, 숨을 쉬세요.",
+          subEn: "Reduce tasks and breathe.",
           safe: "오늘의 성공 기준: 숨 돌리기",
+          safeEn: "Today's success goal: Catch your breath",
         },
         {
           type: "C",
           main: "오늘은 감정이 핸들을 잡기 쉽습니다.",
+          mainEn: "Today, emotions easily take the wheel.",
           sub: "말을 줄이고, 행동도 줄이세요.",
+          subEn: "Reduce words and actions.",
           safe: "오늘의 성공 기준: 말 줄이기",
+          safeEn: "Today's success goal: Reduce talking",
         },
         {
           type: "C",
           main: "오늘은 시작이 가장 큰 벽입니다.",
+          mainEn: "Today, starting is the biggest wall.",
           sub: "벽을 넘으려 하지 말고 옆으로 돌아가세요.",
+          subEn: "Don't try to climb the wall, go around it.",
           safe: "오늘의 성공 기준: 쉬운 길 선택",
+          safeEn: "Today's success goal: Choose the easy path",
         },
         {
           type: "C",
           main: "오늘은 몸과 머리가 서로 엇갈립니다.",
+          mainEn: "Today, body and mind are out of sync.",
           sub: "큰 계획 대신 작은 루틴만.",
+          subEn: "Just small routines instead of big plans.",
           safe: "오늘의 성공 기준: 물/정리/샤워",
+          safeEn: "Today's success goal: Water/organize/shower",
         },
         {
           type: "C",
           main: "오늘은 ‘멈추는 용기’가 필요합니다.",
+          mainEn: "오늘은 ‘멈추는 용기’가 필요합니다.",
           sub: "멈춘다고 망하지 않습니다. 오히려 회복됩니다.",
+          subEn: "Stopping doesn't mean failure. You'll recover instead.",
           safe: "오늘의 성공 기준: 멈추기",
+          safeEn: "Today's success goal: Stop",
         },
         {
           type: "C",
           main: "오늘은 몰입하면 회복비가 붙는 날입니다.",
+          mainEn: "Today is a day when immersion comes with recovery costs.",
           sub: "짧게만 하고, 남은 시간은 회복에 쓰세요.",
+          subEn: "Do it short, use the remaining time for recovery.",
           safe: "오늘의 성공 기준: 회복비 절약",
+          safeEn: "Today's success goal: Save recovery costs",
         },
         {
           type: "C",
           main: "오늘은 뭘 해도 만족이 안 날 수 있습니다.",
+          mainEn: "Today, nothing you do may bring satisfaction.",
           sub: "그럴 땐 ‘완료’만 남기면 됩니다.",
+          subEn: "그럴 땐 ‘완료’만 남기면 됩니다.",
           safe: "오늘의 성공 기준: 완료 1개",
+          safeEn: "Today's success goal: Complete 1 thing",
         },
         {
           type: "C",
           main: "오늘은 비교하면 더 힘든 날입니다.",
+          mainEn: "Today is harder if you compare.",
           sub: "오늘은 내 속도로만 가세요.",
+          subEn: "Just go at your own pace today.",
           safe: "오늘의 성공 기준: 비교 금지",
+          safeEn: "Today's success goal: No comparison",
         },
         {
           type: "C",
           main: "오늘은 ‘정리’도 무리일 수 있습니다.",
+          mainEn: "오늘은 ‘정리’도 무리일 수 있습니다.",
           sub: "시야를 좁혀서 딱 한 구역만.",
+          subEn: "Narrow your view to just one area.",
           safe: "오늘의 성공 기준: 한 구역만",
+          safeEn: "Today's success goal: Just one area",
         },
         {
           type: "C",
           main: "오늘은 컨디션이 휴식을 요구합니다.",
+          mainEn: "Today, your condition demands rest.",
           sub: "지금 쉬는 게 내일을 사는 방법입니다.",
+          subEn: "Resting now is how you survive tomorrow.",
           safe: "오늘의 성공 기준: 지금 쉬기",
+          safeEn: "Today's success goal: Rest now",
         },
       ];
 
@@ -980,26 +1393,32 @@
       const history = [];
 
       // Render choice buttons
-      QUESTIONS.forEach((q, i) => {
-        const box = document.querySelector(`.choices[data-q="${q.key}"]`);
-        q.choices.forEach((c) => {
-          const btn = document.createElement("button");
-          btn.className = "btnChoice";
-          btn.type = "button";
-          btn.textContent = c.label;
-          btn.addEventListener("click", () => {
-            answers[q.key] = c.v;
-            history.push({ pane: `q${i}`, key: q.key, v: c.v });
-            // 선택하면 바로 다음으로
-            if (i < QUESTIONS.length - 1) {
-              showPane(`q${i + 1}`);
-            } else {
-              showResult();
-            }
+      function renderQuestions() {
+        const QUESTIONS = getQuestions();
+        QUESTIONS.forEach((q, i) => {
+          const box = document.querySelector(`.choices[data-q="${q.key}"]`);
+          if (!box) return;
+          box.innerHTML = "";
+          q.choices.forEach((c) => {
+            const btn = document.createElement("button");
+            btn.className = "btnChoice";
+            btn.type = "button";
+            btn.textContent = c.label;
+            btn.addEventListener("click", () => {
+              answers[q.key] = c.v;
+              history.push({ pane: `q${i}`, key: q.key, v: c.v });
+              // 선택하면 바로 다음으로
+              if (i < QUESTIONS.length - 1) {
+                showPane(`q${i + 1}`);
+              } else {
+                showResult();
+              }
+            });
+            box.appendChild(btn);
           });
-          box.appendChild(btn);
         });
-      });
+      }
+      renderQuestions();
 
       // Load today's saved result if exists
       const saved = loadSaved(today);
@@ -1035,7 +1454,7 @@
         const text = buildShareText(getCurrentResultPayload());
         try {
           await navigator.clipboard.writeText(text);
-          showToast("복사 완료");
+          showToast(t("toastCopy"));
         } catch (e) {
           // fallback
           prompt("복사해서 사용하세요:", text);
@@ -1046,7 +1465,7 @@
         const payload = getCurrentResultPayload();
         const text = buildShareText(payload);
         const shareData = {
-          title: "오늘 상태 점검표",
+          title: t("shareTitle"),
           text,
           url: location.href,
         };
@@ -1057,7 +1476,7 @@
         } else {
           try {
             await navigator.clipboard.writeText(text);
-            showToast("공유 텍스트 복사됨");
+            showToast(t("toastCopyLink"));
           } catch (e) {
             prompt("공유 텍스트:", text);
           }
@@ -1087,8 +1506,8 @@
         resetBtn.style.display = isResult ? "inline-flex" : "none";
 
         footHint.textContent = isResult
-          ? "점수 없이 한 문장"
-          : "하루 1회 루틴용";
+          ? t("footHintResult")
+          : t("footHintRoutine");
 
         updateProgress(name);
         // scroll to top of card on mobile
@@ -1122,6 +1541,20 @@
       // =========================
       // 5) 결과 로직 (점수 노출 X, 내부적으로만 구간 분류)
       // =========================
+      function getResults() {
+        return RESULTS.map((r) => {
+          if (currentLang === "en") {
+            return {
+              ...r,
+              main: r.mainEn || r.main,
+              sub: r.subEn || r.sub,
+              safe: r.safeEn || r.safe,
+            };
+          }
+          return r;
+        });
+      }
+
       function classifyType(sum) {
         // 0~10 범위(5문항 * 0~2)
         // A: <=3, B: 4~6, C: >=7
@@ -1133,14 +1566,15 @@
       function showResult() {
         const vals = Object.values(answers);
         if (vals.some((v) => v === null)) {
-          showToast("아직 체크가 남아있어요");
+          showToast(t("toastRemaining"));
           return;
         }
 
         const sum = vals.reduce((a, b) => a + b, 0);
         const type = classifyType(sum);
 
-        const pool = RESULTS.filter((r) => r.type === type);
+        const results = getResults();
+        const pool = results.filter((r) => r.type === type);
 
         // date+answers 기반 해시로 "오늘은 이 문장" 느낌 고정
         const seedStr = `${today}|${answers.sleep}${answers.focus}${answers.mood}${answers.body}${answers.lazy}|${type}`;
@@ -1173,11 +1607,12 @@
             : payload.type === "B"
             ? "SAVE MODE"
             : "BRAKE";
-        resultTagEl.textContent = `결과 · ${label}`;
+        const labelKey = payload.type === "A" ? "resultLabelA" : payload.type === "B" ? "resultLabelB" : "resultLabelC";
+        resultTagEl.textContent = `${t("resultTag")} · ${t(labelKey)}`;
 
         resultMetaEl.textContent = fromSaved
-          ? "오늘 결과는 이미 생성되어 있어요. (다시하기로 재생성 가능)"
-          : "오늘 결과가 저장되었습니다. (브라우저 로컬 저장)";
+          ? t("resultMetaSaved")
+          : t("resultMetaNew");
       }
 
       function getCurrentResultPayload() {
@@ -1196,8 +1631,8 @@
       function buildShareText(payload) {
         // 공유 텍스트: 짧고 복붙 쉬운 형태
         return [
-          "오늘 상태 점검표",
-          `“${payload.main}”`,
+          t("shareTitle"),
+          `"${payload.main}"`,
           payload.sub ? `- ${payload.sub}` : "",
           payload.safe ? `- ${payload.safe}` : "",
           "",
