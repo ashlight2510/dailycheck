@@ -731,7 +731,10 @@
         const stored = localStorage.getItem("preferredLang");
         if (translations[stored]) return stored;
         const browser = navigator.language?.toLowerCase() || "";
-        return browser.startsWith("ko") ? "ko" : "en";
+        if (browser && browser.toLowerCase().startsWith("ko")) {
+          return "ko";
+        }
+        return defaultLang;
       }
 
       // Initialize language
