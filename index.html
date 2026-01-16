@@ -442,17 +442,18 @@
               <span>DAILY CHECK</span>
             </div>
             <div>
-              <h1 class="title">오늘 상태 점검표</h1>
-              <p class="sub">5개 체크 → 오늘 컨디션 한 문장</p>
+              <h1 class="title" data-i18n="title">오늘 상태 점검표</h1>
+              <p class="sub" data-i18n="subtitle">5개 체크 → 오늘 컨디션 한 문장</p>
             </div>
           </div>
           <div class="topRight">
             <div class="badge" id="todayBadge"></div>
-            <a
+              <a
               class="btn btnLink"
               href="https://funnyfunny.cloud/"
               target="_blank"
               rel="noopener"
+              data-i18n="viewMore"
               >다른 서비스 보기</a
             >
           </div>
@@ -472,15 +473,15 @@
           <div class="stage">
             <!-- Intro -->
             <section class="pane active" data-pane="intro">
-              <div class="qTag">시작</div>
-              <h2 class="qTitle">오늘, 밀어붙여도 되는 날인가요?</h2>
-              <p class="qHint">점수 없이, 딱 한 문장으로만 알려드립니다.</p>
+              <div class="qTag" data-i18n="introTag">시작</div>
+              <h2 class="qTitle" data-i18n="introTitle">오늘, 밀어붙여도 되는 날인가요?</h2>
+              <p class="qHint" data-i18n="introHint">점수 없이, 딱 한 문장으로만 알려드립니다.</p>
 
               <div class="choices">
-                <button class="btnChoice" id="startBtn">시작하기</button>
+                <button class="btnChoice" id="startBtn" data-i18n="startBtn">시작하기</button>
               </div>
 
-              <p class="mutedSmall">
+              <p class="mutedSmall" data-i18n="disclaimer">
                 ※ 제공되는 문구는 참고용입니다. 건강/의학적 판단이 필요한 경우
                 전문 상담을 권장합니다.
               </p>
@@ -489,43 +490,43 @@
             <!-- Questions -->
             <section class="pane" data-pane="q0">
               <div class="qTag">1/5</div>
-              <h2 class="qTitle">수면은 어땠나요?</h2>
-              <p class="qHint">오늘의 바닥을 결정하는 값</p>
+              <h2 class="qTitle" data-i18n="q0_title">수면은 어땠나요?</h2>
+              <p class="qHint" data-i18n="q0_hint">오늘의 바닥을 결정하는 값</p>
               <div class="choices" data-q="sleep"></div>
             </section>
 
             <section class="pane" data-pane="q1">
               <div class="qTag">2/5</div>
-              <h2 class="qTitle">집중은 가능한가요?</h2>
-              <p class="qHint">오늘의 속도를 정하는 값</p>
+              <h2 class="qTitle" data-i18n="q1_title">집중은 가능한가요?</h2>
+              <p class="qHint" data-i18n="q1_hint">오늘의 속도를 정하는 값</p>
               <div class="choices" data-q="focus"></div>
             </section>
 
             <section class="pane" data-pane="q2">
               <div class="qTag">3/5</div>
-              <h2 class="qTitle">기분은 어떤가요?</h2>
-              <p class="qHint">오늘의 마찰을 정하는 값</p>
+              <h2 class="qTitle" data-i18n="q2_title">기분은 어떤가요?</h2>
+              <p class="qHint" data-i18n="q2_hint">오늘의 마찰을 정하는 값</p>
               <div class="choices" data-q="mood"></div>
             </section>
 
             <section class="pane" data-pane="q3">
               <div class="qTag">4/5</div>
-              <h2 class="qTitle">몸 상태는요?</h2>
-              <p class="qHint">오늘의 지속력을 정하는 값</p>
+              <h2 class="qTitle" data-i18n="q3_title">몸 상태는요?</h2>
+              <p class="qHint" data-i18n="q3_hint">오늘의 지속력을 정하는 값</p>
               <div class="choices" data-q="body"></div>
             </section>
 
             <section class="pane" data-pane="q4">
               <div class="qTag">5/5</div>
-              <h2 class="qTitle">귀찮음이 얼마나 오나요?</h2>
-              <p class="qHint">오늘의 저항값</p>
+              <h2 class="qTitle" data-i18n="q4_title">귀찮음이 얼마나 오나요?</h2>
+              <p class="qHint" data-i18n="q4_hint">오늘의 저항값</p>
               <div class="choices" data-q="lazy"></div>
             </section>
 
             <!-- Result -->
             <section class="pane" data-pane="result">
-              <div class="qTag" id="resultTag">결과</div>
-              <h2 class="qTitle">오늘 컨디션 요약</h2>
+              <div class="qTag" id="resultTag" data-i18n="resultTag">결과</div>
+              <h2 class="qTitle" data-i18n="resultTitle">오늘 컨디션 요약</h2>
 
               <div class="resultMain" id="resultMain">—</div>
               <p class="resultSub" id="resultSub">—</p>
@@ -538,16 +539,16 @@
           <div class="footRow">
             <div class="mini" id="footHint">하루 1회 루틴용</div>
             <div style="display: flex; gap: 8px; align-items: center">
-              <button class="btn" id="backBtn" style="display: none">
+              <button class="btn" id="backBtn" style="display: none" data-i18n="backBtn">
                 이전
               </button>
-              <button class="btn" id="copyBtn" style="display: none">
+              <button class="btn" id="copyBtn" style="display: none" data-i18n="copyBtn">
                 결과 복사
               </button>
-              <button class="btn" id="shareBtn" style="display: none">
+              <button class="btn" id="shareBtn" style="display: none" data-i18n="shareBtn">
                 공유
               </button>
-              <button class="btn" id="resetBtn" style="display: none">
+              <button class="btn" id="resetBtn" style="display: none" data-i18n="resetBtn">
                 다시하기
               </button>
             </div>
@@ -556,7 +557,7 @@
       </div>
     </div>
 
-    <div class="toast" id="toast" role="status" aria-live="polite">
+    <div class="toast" id="toast" role="status" aria-live="polite" data-i18n="toastCopy">
       복사 완료
     </div>
 
@@ -570,7 +571,7 @@
           metaDescription: "수면·집중·기분·몸·귀찮음 5가지로 오늘 컨디션을 한 문장으로 확인합니다. 점수 없이, 딱 한 문장.",
           metaOgTitle: "오늘 상태 점검표",
           metaOgDescription: "오늘, 밀어붙여도 되는 날인가요? 5초 체크 → 한 문장.",
-          title: t("shareTitle"),
+          title: "오늘 상태 점검표",
           subtitle: "5개 체크 → 오늘 컨디션 한 문장",
           viewMore: "다른 서비스 보기",
           progressReady: "준비",
@@ -831,7 +832,7 @@
         {
           type: "A",
           main: "오늘은 ‘일단 하면 되는’ 날입니다.",
-          mainEn: "오늘은 ‘일단 하면 되는’ 날입니다.",
+          mainEn: "Today is a 'just do it' day.",
           sub: "완벽은 금지. 실행이 이깁니다.",
           subEn: "Perfection is forbidden. Execution wins.",
           safe: "오늘의 성공 기준: 60%로 제출",
@@ -867,7 +868,7 @@
         {
           type: "A",
           main: "오늘은 ‘정리하면 끝나는’ 날입니다.",
-          mainEn: "오늘은 ‘정리하면 끝나는’ 날입니다.",
+          mainEn: "Today is a 'finish by organizing' day.",
           sub: "쌓인 것들 중 하나만 치워도 체감이 큽니다.",
           subEn: "Clearing just one of the piled things makes a big difference.",
           safe: "오늘의 성공 기준: 정리 1개",
@@ -894,7 +895,7 @@
         {
           type: "A",
           main: "오늘은 ‘쌓아두기’에 최적인 날입니다.",
-          mainEn: "오늘은 ‘쌓아두기’에 최적인 날입니다.",
+          mainEn: "Today is optimal for 'building up'.",
           sub: "조금만 해도 복리처럼 남습니다.",
           subEn: "Even a little bit accumulates like compound interest.",
           safe: "오늘의 성공 기준: 20분 누적",
@@ -921,7 +922,7 @@
         {
           type: "A",
           main: "오늘은 ‘해놓고 잊기’가 가능한 날입니다.",
-          mainEn: "오늘은 ‘해놓고 잊기’가 가능한 날입니다.",
+          mainEn: "Today is a day when 'do it and forget it' is possible.",
           sub: "귀찮은 일을 먼저 끝내면 하루가 편해집니다.",
           subEn: "Finish annoying tasks first and the day becomes easier.",
           safe: "오늘의 성공 기준: 귀찮은 거 1개 처리",
@@ -948,7 +949,7 @@
         {
           type: "A",
           main: "오늘은 ‘정리+실행’ 조합이 잘 먹힙니다.",
-          mainEn: "오늘은 ‘정리+실행’ 조합이 잘 먹힙니다.",
+          mainEn: "Today, the 'organize + execute' combination works well.",
           sub: "할 일 목록을 줄이고 바로 하세요.",
           subEn: "Reduce your to-do list and do it right away.",
           safe: "오늘의 성공 기준: 목록 반으로 줄이기",
@@ -975,7 +976,7 @@
         {
           type: "A",
           main: "오늘은 ‘해야 할 말’을 하기 좋은 날입니다.",
-          mainEn: "오늘은 ‘해야 할 말’을 하기 좋은 날입니다.",
+          mainEn: "Today is a good day to say what needs to be said.",
           sub: "대화는 짧게, 요지는 명확하게.",
           subEn: "Keep conversations short, points clear.",
           safe: "오늘의 성공 기준: 한 문장으로 말하기",
@@ -1004,7 +1005,7 @@
         {
           type: "B",
           main: "오늘은 ‘가볍게 처리’가 정답입니다.",
-          mainEn: "오늘은 ‘가볍게 처리’가 정답입니다.",
+          mainEn: "Today, 'light handling' is the answer.",
           sub: "깊게 파기보다 얕게 여러 개가 더 맞습니다.",
           subEn: "Multiple shallow tasks are better than one deep dive.",
           safe: "오늘의 성공 기준: 가벼운 완료 3개",
@@ -1015,7 +1016,7 @@
           main: "오늘은 속도보다 방향이 중요한 날입니다.",
           mainEn: "Today, direction is more important than speed.",
           sub: "빨리보다 ‘맞게’가 이깁니다.",
-          subEn: "빨리보다 ‘맞게’가 이깁니다.",
+          subEn: "'Right' wins over 'fast'.",
           safe: "오늘의 성공 기준: 방향 확인 1번",
           safeEn: "Today's success goal: Check direction once",
         },
@@ -1031,7 +1032,7 @@
         {
           type: "B",
           main: "오늘은 ‘할 건 하되 욕심은 금지’인 날입니다.",
-          mainEn: "오늘은 ‘할 건 하되 욕심은 금지’인 날입니다.",
+          mainEn: "Today is a 'do it but no greed' day.",
           sub: "목표를 줄이면 충분히 괜찮은 하루가 됩니다.",
           subEn: "Reducing goals makes for a sufficiently good day.",
           safe: "오늘의 성공 기준: 목표 1개로 축소",
@@ -1051,14 +1052,14 @@
           main: "오늘은 감정에 휘둘리기 쉬운 날입니다.",
           mainEn: "Today is a day when you're easily swayed by emotions.",
           sub: "결정은 ‘작게’만 하세요.",
-          subEn: "결정은 ‘작게’만 하세요.",
+          subEn: "Make decisions 'small' only.",
           safe: "오늘의 성공 기준: 작은 결정만",
           safeEn: "Today's success goal: Only small decisions",
         },
         {
           type: "B",
           main: "오늘은 ‘정리’가 먼저인 날입니다.",
-          mainEn: "오늘은 ‘정리’가 먼저인 날입니다.",
+          mainEn: "Today, 'organization' comes first.",
           sub: "뭐부터 할지 정하면 절반은 끝입니다.",
           subEn: "Deciding what to do first is half the battle.",
           safe: "오늘의 성공 기준: 우선순위 1~3 정하기",
@@ -1076,7 +1077,7 @@
         {
           type: "B",
           main: "오늘은 ‘루틴만 지켜도 성공’인 날입니다.",
-          mainEn: "오늘은 ‘루틴만 지켜도 성공’인 날입니다.",
+          mainEn: "Today is a day when 'just keeping routine' is success.",
           sub: "기본만 해도 충분합니다.",
           subEn: "Just the basics are enough.",
           safe: "오늘의 성공 기준: 기본 3개(물/정리/식사)",
@@ -1094,7 +1095,7 @@
         {
           type: "B",
           main: "오늘은 ‘미루지 않기’만 해도 이깁니다.",
-          mainEn: "오늘은 ‘미루지 않기’만 해도 이깁니다.",
+          mainEn: "Today, just 'not postponing' is enough to win.",
           sub: "큰 것 말고 작은 것부터.",
           subEn: "Not big things, start with small ones.",
           safe: "오늘의 성공 기준: 5분 작업 1개",
@@ -1112,7 +1113,7 @@
         {
           type: "B",
           main: "오늘은 ‘사람’보다 ‘일’에 에너지를 쓰는 게 낫습니다.",
-          mainEn: "오늘은 ‘사람’보다 ‘일’에 에너지를 쓰는 게 낫습니다.",
+          mainEn: "Today, it's better to spend energy on 'work' than 'people'.",
           sub: "불필요한 대화는 줄이세요.",
           subEn: "Reduce unnecessary conversations.",
           safe: "오늘의 성공 기준: 대화 줄이기",
@@ -1130,7 +1131,7 @@
         {
           type: "B",
           main: "오늘은 ‘가벼운 성취’가 컨디션을 올립니다.",
-          mainEn: "오늘은 ‘가벼운 성취’가 컨디션을 올립니다.",
+          mainEn: "Today, 'light achievements' boost your condition.",
           sub: "바로 끝나는 것부터 처리하세요.",
           subEn: "Handle things that end immediately first.",
           safe: "오늘의 성공 기준: 1분짜리 완료 2개",
@@ -1157,7 +1158,7 @@
         {
           type: "B",
           main: "오늘은 ‘지키는 하루’가 더 어울립니다.",
-          mainEn: "오늘은 ‘지키는 하루’가 더 어울립니다.",
+          mainEn: "Today, a 'maintaining day' fits better.",
           sub: "새로운 시도는 작게만.",
           subEn: "New attempts, keep them small.",
           safe: "오늘의 성공 기준: 새 시도 1cm",
@@ -1188,7 +1189,7 @@
           main: "오늘은 쉬는 쪽이 이기는 선택입니다.",
           mainEn: "Today, choosing to rest is the winning choice.",
           sub: "해야 할 일은 ‘최소치’만 남기세요.",
-          subEn: "해야 할 일은 ‘최소치’만 남기세요.",
+          subEn: "Leave only the 'minimum' of what needs to be done.",
           safe: "오늘의 성공 기준: 최소치만",
           safeEn: "Today's success goal: Minimum only",
         },
@@ -1204,7 +1205,7 @@
         {
           type: "C",
           main: "오늘은 ‘진행’보다 ‘회복’이 우선입니다.",
-          mainEn: "오늘은 ‘진행’보다 ‘회복’이 우선입니다.",
+          mainEn: "Today, 'recovery' takes priority over 'progress'.",
           sub: "회복이 되면 내일이 열립니다.",
           subEn: "When you recover, tomorrow opens up.",
           safe: "오늘의 성공 기준: 회복 1개",
@@ -1240,7 +1241,7 @@
         {
           type: "C",
           main: "오늘은 ‘그냥 해내기’가 어려운 날입니다.",
-          mainEn: "오늘은 ‘그냥 해내기’가 어려운 날입니다.",
+          mainEn: "Today is a day when 'just getting it done' is difficult.",
           sub: "작게 쪼개면 겨우 통과합니다.",
           subEn: "Only passable if broken into small pieces.",
           safe: "오늘의 성공 기준: 3분 단위로 쪼개기",
@@ -1258,7 +1259,7 @@
         {
           type: "C",
           main: "오늘은 ‘미루기’가 아니라 ‘보호’가 필요합니다.",
-          mainEn: "오늘은 ‘미루기’가 아니라 ‘보호’가 필요합니다.",
+          mainEn: "Today, 'protection' is needed, not 'procrastination'.",
           sub: "스스로를 보호하면 내일이 살아납니다.",
           subEn: "Protecting yourself brings tomorrow to life.",
           safe: "오늘의 성공 기준: 보호 모드",
@@ -1303,7 +1304,7 @@
         {
           type: "C",
           main: "오늘은 ‘멈추는 용기’가 필요합니다.",
-          mainEn: "오늘은 ‘멈추는 용기’가 필요합니다.",
+          mainEn: "Today, you need the 'courage to stop'.",
           sub: "멈춘다고 망하지 않습니다. 오히려 회복됩니다.",
           subEn: "Stopping doesn't mean failure. You'll recover instead.",
           safe: "오늘의 성공 기준: 멈추기",
@@ -1323,7 +1324,7 @@
           main: "오늘은 뭘 해도 만족이 안 날 수 있습니다.",
           mainEn: "Today, nothing you do may bring satisfaction.",
           sub: "그럴 땐 ‘완료’만 남기면 됩니다.",
-          subEn: "그럴 땐 ‘완료’만 남기면 됩니다.",
+          subEn: "In that case, just leave 'completion'.",
           safe: "오늘의 성공 기준: 완료 1개",
           safeEn: "Today's success goal: Complete 1 thing",
         },
@@ -1339,7 +1340,7 @@
         {
           type: "C",
           main: "오늘은 ‘정리’도 무리일 수 있습니다.",
-          mainEn: "오늘은 ‘정리’도 무리일 수 있습니다.",
+          mainEn: "Today, even 'organization' may be too much.",
           sub: "시야를 좁혀서 딱 한 구역만.",
           subEn: "Narrow your view to just one area.",
           safe: "오늘의 성공 기준: 한 구역만",
@@ -1521,21 +1522,21 @@
 
       function updateProgress(name) {
         if (name === "intro") {
-          progressText.textContent = "준비";
-          progressMini.textContent = "5초 체크";
+          progressText.textContent = t("progressReady");
+          progressMini.textContent = t("progressCheck");
           progressBar.style.width = "0%";
           return;
         }
         if (name.startsWith("q")) {
           const i = parseInt(name.slice(1), 10);
-          progressText.textContent = `체크 중`;
+          progressText.textContent = t("progressChecking");
           progressMini.textContent = `${i + 1} / 5`;
           progressBar.style.width = `${Math.round(((i + 1) / 5) * 100)}%`;
           return;
         }
         if (name === "result") {
-          progressText.textContent = "완료";
-          progressMini.textContent = "오늘의 한 문장";
+          progressText.textContent = t("progressComplete");
+          progressMini.textContent = t("progressOneSentence");
           progressBar.style.width = "100%";
           return;
         }
@@ -1604,12 +1605,6 @@
         resultSubEl.textContent = payload.sub;
         resultSafeEl.textContent = `✅ ${payload.safe}`;
 
-        const label =
-          payload.type === "A"
-            ? "PUSH OK"
-            : payload.type === "B"
-            ? "SAVE MODE"
-            : "BRAKE";
         const labelKey = payload.type === "A" ? "resultLabelA" : payload.type === "B" ? "resultLabelB" : "resultLabelC";
         resultTagEl.textContent = `${t("resultTag")} · ${t(labelKey)}`;
 
