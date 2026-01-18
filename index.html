@@ -1596,8 +1596,14 @@
         };
 
         saveToday(payload);
-        applyResult(payload, { fromSaved: false });
-        showPane("result");
+        // result.html로 리다이렉트
+        const params = new URLSearchParams({
+          type: payload.type,
+          main: payload.main,
+          sub: payload.sub || '',
+          safe: payload.safe || ''
+        });
+        window.location.href = `result.html?${params.toString()}`;
       }
 
       function applyResult(payload, { fromSaved }) {
